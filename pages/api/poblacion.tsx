@@ -1,5 +1,9 @@
 import { ImageResponse } from '@vercel/og';
-export const config = { runtime: 'edge' };
+
+export const config = {
+  runtime: 'edge',
+};
+
 
 export default async function handler() {
   const res = await fetch("https://www.inegi.org.mx/app/api/indicadores/desarrolladores/json/INDICATOR/6200042410/es/00000/false/BIE/2.0/?token=b55cfc56-efff-64fa-7ab0-88938cd3d197");
