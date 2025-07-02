@@ -4,29 +4,55 @@ export const config = {
   runtime: 'edge',
 };
 
+// Función para convertir fechas tipo "2024-06" o "2024-T4" en texto amigable
+function formatearFecha(fecha: string) {
+  const meses = [
+    "enero", "febrero", "marzo", "abril", "mayo", "junio",
+    "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+  ];
+
+  if (fecha.includes("-")) {
+    const [año, mes] = fecha.split("-");
+    const m = parseInt(mes, 10);
+    if (!isNaN(m)) {
+      return `${meses[m - 1]} ${año}`;
+    }
+  } else if (fecha.includes("T")) {
+    const [año, trimestre] = fecha.split("T");
+    return `trimestre ${trimestre} de ${año}`;
+  }
+
+  return fecha;
+}
+
 export default async function handler() {
-  const res = await fetch("https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/6200205260/es/0700/true/BISE/2.0/b55cfc56-efff-64fa-7ab0-88938cd3d197?type=json");
+  const res = await fetch("https://www.inegi.org.mx/app/api/indicadores/desarrolladores/json/INDICATOR/6200042410/es/00000/false/BIE/2.0/?token=b55cfc56-efff-64fa-7ab0-88938cd3d197");
   const json = await res.json();
-  const poblacion = Number(json.Series[0].OBSERVATIONS[0].OBS_VALUE).toLocaleString("es-MX");
+  const obs = json.Series[0].OBSERVATIONS[0];
+  const poblacion = Number(obs.OBS_VALUE).toLocaleString("es-MX");
+  const fecha = formatearFecha(obs.TIME_PERIOD);
 
   return new ImageResponse(
     (
       <div
         style={{
-          background: '#f0f0f0',
+          background: 'linear-gradient(to bottom, #ffffff, #e8f0fe)',
           height: '100%',
           width: '100%',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          fontSize: 42,
+          fontSize: 40,
           fontWeight: 'bold',
-          color: '#222',
+          color: '#1a1a1a',
+          padding: '20px',
         }}
       >
         <div>Población estimada en México</div>
-        <div>{poblacion}</div>
+        <div style={{ fontSize: 64, margin: '20px 0', color: '#1a73e8' }}>{poblacion}</div>
+        <div style={{ fontSize: 28, color: '#444' }}>Actualizado a {fecha}</div>
+        <div style={{ fontSize: 20, marginTop: 20, color: '#777' }}>Fuente: INEGI</div>
       </div>
     ),
     {
