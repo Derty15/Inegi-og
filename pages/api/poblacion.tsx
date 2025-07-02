@@ -21,9 +21,7 @@ function fechaLegible(raw: string) {
 const sepMiles = (num: string) =>
   num.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-const URL = "https://www.inegi.org.mx/app/api/indicadores/desarrolladores"+
-            "/json/INDICATOR/6200042410/es/00000/false/BIE/2.0/"+
-            "?token=TU_TOKEN_AQUI";
+const URL = "https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/6200028409/es/0700/true/BISE/2.0/b55cfc56-efff-64fa-7ab0-88938cd3d197?type=json";
 
 export default async function handler() {
   try {
