@@ -4,13 +4,11 @@ export const config = {
   runtime: 'edge',
 };
 
-// Función para convertir fechas tipo "2024-06" o "2024-T4" en texto amigable
 function formatearFecha(fecha: string) {
   const meses = [
     "enero", "febrero", "marzo", "abril", "mayo", "junio",
     "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
   ];
-
   if (fecha.includes("-")) {
     const [año, mes] = fecha.split("-");
     const m = parseInt(mes, 10);
@@ -21,15 +19,21 @@ function formatearFecha(fecha: string) {
     const [año, trimestre] = fecha.split("T");
     return `trimestre ${trimestre} de ${año}`;
   }
-
   return fecha;
+}
+
+function formatearNumero(numStr: string) {
+  const partes = numStr.split(".");
+  const entero = partes[0];
+  const decimal = partes[1] ? `.${partes[1]}` : "";
+  return entero.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + decimal;
 }
 
 export default async function handler() {
   const res = await fetch("https://www.inegi.org.mx/app/api/indicadores/desarrolladores/json/INDICATOR/6200042410/es/00000/false/BIE/2.0/?token=b55cfc56-efff-64fa-7ab0-88938cd3d197");
   const json = await res.json();
   const obs = json.Series[0].OBSERVATIONS[0];
-  const poblacion = Number(obs.OBS_VALUE).toLocaleString("es-MX");
+  const poblacion = formatearNumero(obs.OBS_VALUE);
   const fecha = formatearFecha(obs.TIME_PERIOD);
 
   return new ImageResponse(
