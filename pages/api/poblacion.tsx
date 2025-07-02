@@ -43,7 +43,7 @@ export default async function handler() {
         justifyContent:"center",alignItems:"center",
         fontWeight:"bold",color:"#1a1a1a",padding:"24px"}}
       >
-        <div>Población estimada en México</div>
+        <div>Tasa de incidencia delictiva por robo o asalto en la calle o transporte público por cada cien mil habitantes</div>
         <div style={{fontSize:64,color:"#1a73e8",margin:"20px 0"}}>{poblacion}</div>
         <div style={{fontSize:28,color:"#444"}}>Actualizado a {fecha}</div>
         <div style={{fontSize:20,color:"#777",marginTop:16}}>Fuente: INEGI</div>
