@@ -1,67 +1,71 @@
 import { ImageResponse } from '@vercel/og';
 
-export const config = {
-  runtime: 'edge',
-};
+export const config = { runtime: 'edge' };
 
-function formatearFecha(fecha: string) {
-  const meses = [
-    "enero", "febrero", "marzo", "abril", "mayo", "junio",
-    "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
-  ];
-  if (fecha.includes("-")) {
-    const [año, mes] = fecha.split("-");
-    const m = parseInt(mes, 10);
-    if (!isNaN(m)) {
-      return `${meses[m - 1]} ${año}`;
-    }
-  } else if (fecha.includes("T")) {
-    const [año, trimestre] = fecha.split("T");
-    return `trimestre ${trimestre} de ${año}`;
+/* Convierte “2024-06” → “junio 2024” o “2024-T4” → “trimestre 4 de 2024” */
+function fechaLegible(raw: string) {
+  const m = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  if (raw.includes("-")) {
+    const [a, mes] = raw.split("-");
+    const idx = parseInt(mes, 10) - 1;
+    return `${m[idx]} ${a}`;
   }
-  return fecha;
+  if (raw.includes("T")) {
+    const [a, t] = raw.split("T");
+    return `trimestre ${t} de ${a}`;
+  }
+  return raw;
 }
 
-function formatearNumero(numStr: string) {
-  const partes = numStr.split(".");
-  const entero = partes[0];
-  const decimal = partes[1] ? `.${partes[1]}` : "";
-  return entero.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + decimal;
-}
+/* Añade separadores de miles (sin usar Intl) */
+const sepMiles = (num: string) =>
+  num.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+const URL = "https://www.inegi.org.mx/app/api/indicadores/desarrolladores"+
+            "/json/INDICATOR/6200042410/es/00000/false/BIE/2.0/"+
+            "?token=TU_TOKEN_AQUI";
 
 export default async function handler() {
-  const res = await fetch("https://www.inegi.org.mx/app/api/indicadores/desarrolladores/json/INDICATOR/6200042410/es/00000/false/BIE/2.0/?token=b55cfc56-efff-64fa-7ab0-88938cd3d197");
-  const json = await res.json();
-  const obs = json.Series[0].OBSERVATIONS[0];
-  const poblacion = formatearNumero(obs.OBS_VALUE);
-  const fecha = formatearFecha(obs.TIME_PERIOD);
+  try {
+    const r = await fetch(URL);
+    if (!r.ok) throw new Error(`INEGI API error: ${r.status}`);
+    const j = await r.json();
 
-  return new ImageResponse(
-    (
-      <div
-        style={{
-          background: 'linear-gradient(to bottom, #ffffff, #e8f0fe)',
-          height: '100%',
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          fontSize: 40,
-          fontWeight: 'bold',
-          color: '#1a1a1a',
-          padding: '20px',
-        }}
+    const obs = j.Series?.[0]?.OBSERVATIONS?.[0];
+    if (!obs) throw new Error("Estructura de respuesta inesperada");
+
+    const poblacion = sepMiles(obs.OBS_VALUE);
+    const fecha     = fechaLegible(obs.TIME_PERIOD);
+
+    return new ImageResponse(
+      <div style={{
+        background: "linear-gradient(#fff,#e8f0fe)",
+        width:"100%",height:"100%",
+        display:"flex",flexDirection:"column",
+        justifyContent:"center",alignItems:"center",
+        fontWeight:"bold",color:"#1a1a1a",padding:"24px"}}
       >
         <div>Población estimada en México</div>
-        <div style={{ fontSize: 64, margin: '20px 0', color: '#1a73e8' }}>{poblacion}</div>
-        <div style={{ fontSize: 28, color: '#444' }}>Actualizado a {fecha}</div>
-        <div style={{ fontSize: 20, marginTop: 20, color: '#777' }}>Fuente: INEGI</div>
-      </div>
-    ),
-    {
-      width: 800,
-      height: 400,
-    }
-  );
+        <div style={{fontSize:64,color:"#1a73e8",margin:"20px 0"}}>{poblacion}</div>
+        <div style={{fontSize:28,color:"#444"}}>Actualizado a {fecha}</div>
+        <div style={{fontSize:20,color:"#777",marginTop:16}}>Fuente: INEGI</div>
+      </div>,
+      { width: 800, height: 400 }
+    );
+
+  } catch (err:any) {
+    /* Imagen de fallback con el mensaje de error */
+    return new ImageResponse(
+      <div style={{
+        width:"100%",height:"100%",display:"flex",
+        justifyContent:"center",alignItems:"center",
+        background:"#ffeaea",color:"#b30000",
+        fontSize:24,fontFamily:"sans-serif",padding:"20px",
+        textAlign:"center"}}>
+        Error: {err.message}
+      </div>,
+      { width: 800, height: 400 }
+    );
+  }
 }
+
