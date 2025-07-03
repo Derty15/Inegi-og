@@ -47,16 +47,16 @@ export default async function handler() {
           padding: '20px'
         }}
       >
-        <div style={{ fontSize: 32, marginBottom: 10 }}>
+        <div>
           Índice Nacional de Precios al Consumidor
         </div>
-        <div style={{ fontSize: 60, color: '#1a73e8', margin: '10px 0' }}>
+        <div>
           {valor}
         </div>
-        <div style={{ fontSize: 24, color: '#555' }}>
+        <div>
           Actualizado a {fecha}
         </div>
-        <div style={{ fontSize: 20, color: '#777', marginTop: 20 }}>
+        <div>
           Fuente: INEGI
         </div>
       </div>
