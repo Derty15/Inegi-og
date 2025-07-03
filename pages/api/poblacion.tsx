@@ -2,8 +2,8 @@ import { ImageResponse } from '@vercel/og';
 
 export const config = { runtime: 'edge' };
 
-const meses = ["enero","febrero","marzo","abril","mayo","junio",
-               "julio","agosto","septiembre","octubre","noviembre","diciembre"];
+const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio",
+               "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
 const fechaLegible = (raw: string) =>
   raw.includes("-")
     ? `${meses[+raw.split("-")[1] - 1]} ${raw.split("-")[0]}`
@@ -13,7 +13,6 @@ const fechaLegible = (raw: string) =>
 
 const sepMiles = (n: string) => n.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-// INEGI JSONXML endpoint
 const URL =
   "https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/" +
   "INDICATOR/6200028409/es/0700/true/BISE/2.0/b55cfc56-efff-64fa-7ab0-88938cd3d197?type=json";
@@ -46,8 +45,16 @@ export default async function handler() {
             textAlign: "center",
           }}
         >
-          <div style={{ fontSize: 32, maxWidth: 680, display: "flex", flexDirection: "column" }}>
-            <span>Tasa de robo o asalto en calle o transporte público</span>
+          <div style={{
+            fontSize: 32,
+            maxWidth: 680,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center"
+          }}>
+            <span>Tasa de robo o asalto</span>
+            <span>en calle o transporte público</span>
             <span>(por cada 100&nbsp;000 habitantes)</span>
           </div>
           <div style={{ fontSize: 64, color: "#1a73e8", margin: "24px 0" }}>{valor}</div>
