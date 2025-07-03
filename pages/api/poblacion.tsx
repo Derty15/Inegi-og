@@ -32,7 +32,7 @@ export default async function handler() {
       (
         <div
           style={{
-            background: "linear-gradient(to bottom, #ffffff, #e8f0fe)",
+            background: "#cceeff",
             width: "100%",
             height: "100%",
             display: "flex",
