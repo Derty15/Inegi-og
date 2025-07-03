@@ -33,15 +33,19 @@ export default async function handler() {
 
     return new ImageResponse(
       <div style={{
-        background:"linear-gradient(#fff,#e8f0fe)",width:"100%",height:"100%",
-        display:"flex",flexDirection:"column",justifyContent:"center",
-        alignItems:"center",fontWeight:"bold",color:"#1a1a1a",padding:"24px"}}>
-        <div style={{fontSize:32,textAlign:"center",maxWidth:700}}>
-          Tasa de robo o asalto en calle o transporte público (por cada 100 mil habitantes)
+        background: "linear-gradient(to bottom, #ffffff, #e8f0fe)",
+        width:"100%", height:"100%",
+        display:"flex", flexDirection:"column",
+        justifyContent:"center", alignItems:"center",
+        fontWeight:"bold", color:"#1a1a1a", padding:"24px"
+      }}>
+        <div style={{fontSize:32, textAlign:"center", maxWidth:680}}>
+          Tasa de robo o asalto en calle o transporte público
+          (por cada 100&nbsp;000 habitantes)
         </div>
-        <div style={{fontSize:64,color:"#1a73e8",margin:"24px 0"}}>{valor}</div>
-        <div style={{fontSize:28,color:"#444"}}>Actualizado a {fecha}</div>
-        <div style={{fontSize:20,color:"#777",marginTop:12}}>Fuente: INEGI</div>
+        <div style={{fontSize:64, color:"#1a73e8", margin:"24px 0"}}>{valor}</div>
+        <div style={{fontSize:28, color:"#444"}}>Actualizado a {fecha}</div>
+        <div style={{fontSize:20, color:"#777", marginTop:12}}>Fuente: INEGI</div>
       </div>,
       { width: 800, height: 400 }
     );
