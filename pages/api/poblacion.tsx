@@ -32,8 +32,15 @@ export default async function handler() {
     const obs = j?.Series?.[0]?.OBSERVATIONS?.[0];
     if (!obs) throw new Error("No hay datos en la estructura esperada");
 
+    const obs = j?.Series?.[0]?.OBSERVATIONS?.[0];
+    if (!obs) throw new Error("No hay datos en la estructura esperada");
+
     const valor = formatoNumero(obs.OBS_VALUE);
-    const fecha = fechaLegible(obs.TIME_PERIOD);
+
+    /* ← Usamos la fecha de última actualización */
+    const fecha = new Date(j.Series?.[0]?.LASTUPDATE).toLocaleDateString("es-MX", {
+      year: "numeric", month: "long", day: "numeric"
+    });
 
     return new ImageResponse(
       <div style={{
