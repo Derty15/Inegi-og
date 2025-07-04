@@ -35,7 +35,7 @@ export default async function handler() {
     const fechaRaw = serie?.datos?.[0]?.fecha;
     if (!dato || !fechaRaw) throw new Error("Estructura JSON inesperada");
 
-    const valor = num4Dec(dato);     // 18.6652 → "18.6652"
+    const valor = dato;     // 18.6652 → "18.6652"
     const fecha = fechaMX(fechaRaw); // 03/07/2025 → "3 de julio de 2025"
 
     return new ImageResponse(
