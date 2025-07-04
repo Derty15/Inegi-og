@@ -10,7 +10,7 @@ export default async function handler() {
 
   const serie = json.Series?.[0]?.OBSERVATIONS?.[0];
   const valor = Number(serie?.OBS_VALUE).toLocaleString("es-MX");
-  const fecha = fechaLegible(serie?.TIME_PERIOD || "");
+  const fecha = serie?.TIME_PERIOD;
 
   return new ImageResponse(
     (
