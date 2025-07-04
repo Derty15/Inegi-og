@@ -32,9 +32,6 @@ export default async function handler() {
     const obs = j?.Series?.[0]?.OBSERVATIONS?.[0];
     if (!obs) throw new Error("No hay datos en la estructura esperada");
 
-    const obs = j?.Series?.[0]?.OBSERVATIONS?.[0];
-    if (!obs) throw new Error("No hay datos en la estructura esperada");
-
     const valor = formatoNumero(obs.OBS_VALUE);
 
     /* ← Usamos la fecha de última actualización */
