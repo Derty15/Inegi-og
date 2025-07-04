@@ -14,7 +14,7 @@ const fechaMX = (raw = "") => {
 };
 
 const num4Dec = (n = "") =>
-  parseFloat(n).toFixed(4).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  parseFloat(n).toFixed(4);
 
 /* endpoint Banxico ------------------------ */
 const URL =
