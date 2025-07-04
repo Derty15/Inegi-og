@@ -12,7 +12,26 @@ const fechaLegible = (raw:string) =>
       ? `trimestre ${raw.split("T")[1]} de ${raw.split("T")[0]}`
       : raw;
 
-const sepMiles = (n:string) => n.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+function formatoNumero(numStr = "") {
+  const n = parseFloat(numStr);
+  const entero = Math.floor(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const dec = n.toFixed(2).split(".")[1];          // dos decimales
+  return `${entero}.${dec}`;
+}
+function fechaLastUpdate(raw: string): string {
+  // Reemplazar "a. m." y "p. m." por formatos válidos
+  const limpio = raw.replace("a. m.", "AM").replace("p. m.", "PM");
+
+  // Dividir día, mes, año (DD/MM/YYYY HH:MM:SS)
+  const [fechaParte] = limpio.split(" ");
+  const [dia, mes, anio] = fechaParte.split("/");
+
+  // Devuelve formato legible: "19 de septiembre de 2024"
+  const meses = ["enero","febrero","marzo","abril","mayo","junio",
+                 "julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  return `${parseInt(dia)} de ${meses[parseInt(mes)-1]} de ${anio}`;
+}
+
 
 // URL usando jsonxml y type=json
 const URL =
@@ -27,8 +46,9 @@ export default async function handler() {
     const obs = j?.Series?.[0]?.OBSERVATIONS?.[0];
     if (!obs) throw new Error("No hay datos en la estructura esperada");
 
-    const valor = sepMiles(obs.OBS_VALUE);
-    const fecha = fechaLegible(obs.TIME_PERIOD);
+    const valor = formatoNumero(obs.OBS_VALUE);
+
+    const fecha = fechaLastUpdate(j.Series?.[0]?.LASTUPDATE || "");
 
     return new ImageResponse(
       <div style={{
