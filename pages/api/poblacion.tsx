@@ -12,7 +12,12 @@ const fechaLegible = (raw:string) =>
       ? `trimestre ${raw.split("T")[1]} de ${raw.split("T")[0]}`
       : raw;
 
-const sepMiles = (n:string) => n.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+function formatoNumero(numStr = "") {
+  const n = parseFloat(numStr);
+  const entero = Math.floor(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const dec = n.toFixed(2).split(".")[1];          // dos decimales
+  return `${entero}.${dec}`;
+}
 
 // URL usando jsonxml y type=json
 const URL =
@@ -27,7 +32,7 @@ export default async function handler() {
     const obs = j?.Series?.[0]?.OBSERVATIONS?.[0];
     if (!obs) throw new Error("No hay datos en la estructura esperada");
 
-    const valor = sepMiles(obs.OBS_VALUE);
+    const valor = formatoNumero(obs.OBS_VALUE);
     const fecha = fechaLegible(obs.TIME_PERIOD);
 
     return new ImageResponse(
