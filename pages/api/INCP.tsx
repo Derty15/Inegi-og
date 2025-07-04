@@ -50,7 +50,7 @@ export default async function handler() {
           fontFamily: 'sans-serif'
         }}
       >
-        <div style={{ display: 'flex', fontSize: 34 }}>Índice Nacional de Precios al Consumidor</div>
+        <div style={{ display: 'flex', fontSize: 34 }}>Índice Nacional de Precios al Consumidor. Índice general de inflación quincenal</div>
         <div style={{ display: 'flex', fontSize: 60, color: '#1a73e8', margin: '20px 0' }}>{valor}</div>
         <div style={{ display: 'flex', fontSize: 24 }}>Actualizado a {fecha}</div>
         <div style={{ display: 'flex', fontSize: 20, marginTop: 16, color: '#555' }}>Fuente: INEGI</div>
