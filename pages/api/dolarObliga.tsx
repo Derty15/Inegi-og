@@ -2,8 +2,11 @@ import { ImageResponse } from "@vercel/og";
 
 export const config = { runtime: "edge" };
 
-const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio",
-               "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+/* utilidades ------------------------------ */
+const meses = [
+  "enero","febrero","marzo","abril","mayo","junio",
+  "julio","agosto","septiembre","octubre","noviembre","diciembre"
+];
 
 const fechaMX = (raw = "") => {
   const [d, m, a] = raw.split("/");
@@ -13,25 +16,27 @@ const fechaMX = (raw = "") => {
 const num4Dec = (n = "") =>
   parseFloat(n).toFixed(4).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
+/* endpoint Banxico ------------------------ */
 const URL =
   "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF43718/datos/oportuno?token=2cf9846d904329700f8531bc09651a40dcc00194870ab13a7cda12e58ea867dc";
 
 export default async function handler() {
   try {
-    const r = await fetch(URL);
+    const r = await fetch(URL, {
+      headers: { Accept: "application/json" }
+    });
     if (!r.ok) throw new Error(`Banxico API error: ${r.status}`);
-    const xml = await r.text();
 
-    const datoMatch = xml.match(/<dato>\s*([^<]+?)\s*<\/dato>/i);
-    const fechaMatch = xml.match(/<fecha>\s*([^<]+?)\s*<\/fecha>/i);
+    const j = await r.json();
 
-    if (!datoMatch || !fechaMatch) {
-      console.error("XML recibido:", xml); // Este log te ayuda a debuggear
-      throw new Error("Estructura XML inesperada. No se encontraron <dato> o <fecha>.");
-    }
+    /* Sacar dato y fecha */
+    const serie = j?.bmx?.series?.[0];
+    const dato  = serie?.datos?.[0]?.dato;
+    const fechaRaw = serie?.datos?.[0]?.fecha;
+    if (!dato || !fechaRaw) throw new Error("Estructura JSON inesperada");
 
-    const valor = num4Dec(datoMatch[1]);
-    const fecha = fechaMX(fechaMatch[1]);
+    const valor = num4Dec(dato);     // 18.6652 → "18.6652"
+    const fecha = fechaMX(fechaRaw); // 03/07/2025 → "3 de julio de 2025"
 
     return new ImageResponse(
       <div style={{
@@ -58,7 +63,7 @@ export default async function handler() {
       { width: 800, height: 400 }
     );
 
-  } catch (err: any) {
+  } catch (err:any) {
     return new ImageResponse(
       <div style={{
         width: "100%", height: "100%",
