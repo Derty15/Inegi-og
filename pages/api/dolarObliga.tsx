@@ -13,8 +13,6 @@ const fechaMX = (raw = "") => {
   return `${parseInt(d, 10)} de ${meses[parseInt(m, 10) - 1]} de ${a}`;
 };
 
-const num4Dec = (n = "") =>
-  parseFloat(n).toFixed(4).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
 /* endpoint Banxico ------------------------ */
 const URL =
