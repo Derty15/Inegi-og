@@ -33,15 +33,15 @@ export default async function handler() {
 
     return new ImageResponse(
       <div style={{
-        background:"linear-gradient(#fff,#e8f0fe)",width:"100%",height:"100%",
+        background:"linear-gradient(#fff,#e8f0fe)", width:"100%",height:"100%",
         display:"flex",flexDirection:"column",justifyContent:"center",
-        alignItems:"center",fontWeight:"bold",color:"#1a1a1a",padding:"24px"}}>
+        alignItems:"center",fontWeight:"bold", color:"#1a1a1a",padding:"24px"}}>
         <div style={{display: 'flex', fontSize:32,textAlign:"center",maxWidth:700}}>
           Tasa de robo o asalto en calle o transporte público (por cada 100 mil habitantes)
         </div>
-        <div style={{display: 'flex', fontSize:64,color:"#1a73e8",margin:"24px 0"}}>{valor}</div>
-        <div style={{display: 'flex', fontSize:28,color:"#444"}}>Actualizado a {fecha}</div>
-        <div style={{display: 'flex', fontSize:20,color:"#777",marginTop:12}}>Fuente: INEGI</div>
+        <div style={{display: 'flex', fontSize:64, color:"#1a73e8", margin:"24px 0"}}>{valor}</div>
+        <div style={{display: 'flex', fontSize:28, color:"#444"}}>Actualizado a {fecha}</div>
+        <div style={{display: 'flex', fontSize:20, color:"#777", marginTop:12}}>Fuente: INEGI</div>
       </div>,
       { width: 800, height: 400 }
     );
