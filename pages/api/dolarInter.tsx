@@ -18,7 +18,7 @@ const num4Dec = (n = "") =>
 
 /* endpoint Banxico ------------------------ */
 const URL =
-  "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF43718/datos/oportuno?token=2cf9846d904329700f8531bc09651a40dcc00194870ab13a7cda12e58ea867dc";
+  "https://www.banxico.org.mx/SieAPIRest/service/v1/series/SF43787/datos/oportuno?token=2cf9846d904329700f8531bc09651a40dcc00194870ab13a7cda12e58ea867dc";
 
 export default async function handler() {
   try {
