@@ -16,8 +16,7 @@ const sepMiles = (n:string) => n.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
 // URL usando jsonxml y type=json
 const URL =
-  "https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/"+
-  "INDICATOR/6200028409/es/0700/true/BISE/2.0/b55cfc56-efff-64fa-7ab0-88938cd3d197?type=json";
+  "  https://www.inegi.org.mx/app/api/indicadores/desarrolladores/jsonxml/INDICATOR/6200028409/es/0700/true/BISE/2.0/b55cfc56-efff-64fa-7ab0-88938cd3d197?type=json";
 
 export default async function handler() {
   try {
